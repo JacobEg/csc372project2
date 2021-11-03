@@ -34,12 +34,12 @@ public class Translator{
         File file = new File(baseName + ".java");
         file.createNewFile();
         FileWriter output = new FileWriter(file);
-        output.write("public class " + className + " {");
-        output.write("public statis void main(String[] ARGS) {");
+        output.write("public class " + className + " {\n");
+        output.write("public static void main(String[] ARGS) {\n");
         while (input.hasNextLine()){
             // TODO
         }
-        output.write("}\n}");
+        output.write("}\n}\n");
         output.close();
         input.close();
     }
