@@ -53,6 +53,7 @@ public class Translator{
             while (input.hasNextLine()){
                 String line = input.nextLine();
                 // TODO: analyze line-by-line (how to do conditionals and loops)?
+                matcher = varAssgmt.matcher(line);
             }
             output.write("\n}\n}\n");
             output.close();
