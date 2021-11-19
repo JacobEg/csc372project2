@@ -52,6 +52,7 @@ public class Translator{
         File file = new File(baseName + ".java");
         try {
             Scanner input = new Scanner(new File(pathName));
+            file.delete();
             file.createNewFile();
             FileWriter output = new FileWriter(file);
             output.write("public class " + className + " {\n");

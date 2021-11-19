@@ -5,10 +5,11 @@ int count = 0.
 int i = 0.
 
 while i <= m
-if i % x == 0 or i % y == 0
-count = count + 1.
-fin
-i = i + 1.
+    if i % x == 0 or i % y == 0
+    then
+        count = count + 1.
+    fin
+    i = i + 1.
 fin
 
 print(count).
