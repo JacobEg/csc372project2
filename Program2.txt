@@ -1,0 +1,20 @@
+int x = ARGS[0].
+
+int i = 2.
+bool found = false.
+while i < x/2 and not found
+    int j = 2.
+    while j < x/2 and not found
+        if i*j == x
+        then
+            found = true.
+        fin
+    fin
+fin
+
+if not found
+then
+    print("not ").
+fin
+
+print("found\n").
