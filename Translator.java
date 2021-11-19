@@ -59,6 +59,9 @@ public class Translator{
             while (input.hasNextLine()){
                 String line = input.nextLine().strip();
                 // TODO: analyze line-by-line (how to do conditionals and loops)?
+                matcher = varAssgmt.matcher(line);
+                if (matcher.find())
+                    System.out.printf("Variable %s was assigned the value %s", matcher.group(1), matcher.group(2));
             }
             output.write("\n}\n}\n");
             output.close();
