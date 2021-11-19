@@ -21,7 +21,7 @@ public class Translator{
     private static Pattern varDecl = Pattern.compile("int\\s+[a-zA-Z]+[0-9_a-zA-Z]*\\s*=\\s*" + INT_VAL + "\\." + 
     "|bool\\s+[a-zA-Z]+[0-9_a-zA-Z]*\\s*=\\s*" + BOOL_VAL + "\\.");
     private static Pattern varAssgmt = Pattern.compile("[a-zA-Z]+[0-9_a-zA-Z]*\\s*=\\s*(\\-?[0-9]+|true|false|\\-?[a-zA-Z]+[0-9_a-zA-Z]*)\\.");
-    private static Pattern print = Pattern.compile("print\\((\".*\"|'.*')\\)\\.|print\\([a-zA-Z]+[0-9_]*\\)\\.");
+    private static Pattern print = Pattern.compile("print\\(.*\\)\\.");
     private static Pattern boolExpr = Pattern.compile("((((not)\\s+)?" + BOOL_VAL + "\\s+or\\s+)|(((not)\\s+)?" + BOOL_VAL + "\\s+and\\s+))*" + BOOL_VAL);
     private static Pattern intExpr = Pattern.compile("((" + INT_VAL + "\\s*\\+\\s*)|(" + INT_VAL +"\\s*\\-\\s*)|(" +
     INT_VAL +"\\s*\\*\\s*)|(" + INT_VAL +"\\s*/\\s*)|(" + INT_VAL + "\\s*%\\s*))*" + INT_VAL);
