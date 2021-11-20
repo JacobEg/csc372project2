@@ -77,12 +77,6 @@ public class Translator{
                 if(line.equals(""))
                   continue;
                 
-                // int declaration
-                matcher = intDecl.matcher(line);
-                if (matcher.find()) {
-                    output +="int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
-                    continue;
-                }
                 if(line.startsWith("fin")){
                     if(blockTracker.isEmpty()){
                         System.out.println("ERROR: You added a 'fin' before a conditional or loop!");
@@ -94,16 +88,49 @@ public class Translator{
                     }
                 }
 
+                // int declaration
+                matcher = intDecl.matcher(line);
+                if (matcher.find()) {
+                    output +="int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
+                    // check if variable already exists
+                    if (vars.containsKey(matcher.group(1))) {
+                        System.out.println("Error: Variable with name " + matcher.group(1) + " already declared.");
+                        input.close();
+                        System.exit(1);
+                    }
+                    vars.put(matcher.group(1), "int");
+                    continue;
+                }
+                
                 // boolean declaration
                 matcher = boolDecl.matcher(line);
                 if (matcher.find()) {
                     output += "boolean "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
+                    // check if variable already exists
+                    if (vars.containsKey(matcher.group(1))) {
+                        System.out.println("Error: Variable with name " + matcher.group(1) + " already declared.");
+                        input.close();
+                        System.exit(1);
+                    }
+                    vars.put(matcher.group(1), "bool");
                     continue;
                 }
 
                 // int assignment
                 matcher = intAssgmt.matcher(line);
                 if (matcher.find()) {
+                    // check if variable already exists
+                    if (!vars.containsKey(matcher.group(1))) {
+                        System.out.println("Error: Variable " + matcher.group(1) + " not found.");
+                        input.close();
+                        System.exit(1);
+                    }
+                    // check if variable is of correct type
+                    if (!vars.get(matcher.group(1)).equals("int")) {
+                        System.out.println("Type mismatch");
+                        input.close();
+                        System.exit(1);
+                    }
                     output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
@@ -111,6 +138,18 @@ public class Translator{
                 // boolean assignment
                 matcher = boolAssgmt.matcher(line);
                 if (matcher.find()) {
+                    // check if variable already exists
+                    if (!vars.containsKey(matcher.group(1))) {
+                        System.out.println("Error: Variable " + matcher.group(1) + " not found.");
+                        input.close();
+                        System.exit(1);
+                    }
+                    // check if variable is of correct type
+                    if (!vars.get(matcher.group(1)).equals("bool")) {
+                        System.out.println("Type mismatch");
+                        input.close();
+                        System.exit(1);
+                    }
                     output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
