@@ -1,0 +1,4 @@
+if 5 < 9
+then
+print("ah\n").
+fin
