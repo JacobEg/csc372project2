@@ -83,10 +83,16 @@ public class Translator{
                     output +="int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
-                if(line.startsWith("fin") && blockTracker.isEmpty()){
-                    System.out.println("ERROR: You added a 'fin' before a conditional or loop!");
-                    input.close();
-                    System.exit(1);
+                if(line.startsWith("fin")){
+                    if(blockTracker.isEmpty()){
+                        System.out.println("ERROR: You added a 'fin' before a conditional or loop!");
+                        output.close();
+                        input.close();
+                        System.exit(1);
+                    } else{
+                        blockTracker.pop();
+                        output += "}\n";
+                    }
                 }
 
                 // boolean declaration
@@ -117,11 +123,21 @@ public class Translator{
                     continue;
                 }
 
+                // while
+                matcher = whileCond.matcher(line);
+                if(matcher.find()){
+                    blockTracker.push('w');
+                    output += "while(" +
+                    matcher.group(1).replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
+                    "){\n";
+                    continue;
+                }
                 // if-statement
                 matcher = ifCond.matcher(line);
                 if (matcher.find()) {
                     String boolEx = matcher.group(1);
                     output += "if (" + boolEx + ") {\n";
+                    continue;
                 }
 
                 System.out.println("Invalid syntax.");
