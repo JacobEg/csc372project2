@@ -71,7 +71,10 @@ public class Translator{
             file.createNewFile();
             FileWriter output = new FileWriter(file);
             output.write("public class " + className + " {\n");
-            output.write("public static void main(String[] ARGS) {\n");
+            output.write("public static void main(String[] fin) {\n");
+            output.write("int[] ARGS = new int[fin.length];\n");
+            output.write("for(int i = 0; i < fin.length; i++){\n");
+            output.write("ARGS[i] = Integer.parseInt(fin[i]);\n}\n");
             while (input.hasNextLine()){
                 String line = input.nextLine().strip();
                 if(line.equals(""))
