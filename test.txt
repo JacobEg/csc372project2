@@ -1,0 +1,6 @@
+sfd
+sdgasdga
+adsgadfg
+int value = 47.
+print(value).
+zfdgsdfg
