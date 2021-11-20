@@ -134,9 +134,60 @@ public class Translator{
                 // if-statement
                 matcher = ifCond.matcher(line);
                 if (matcher.find()) {
+                    blockTracker.push('i');
                     String boolEx = matcher.group(1);
-                    output += "if (" + boolEx + ") {\n";
+                    output += "if (" +
+                    boolEx.replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
+                    ") {\n";
+                    if(!input.hasNextLine()){
+                        System.out.println("Error: ended file with if statement");
+                        input.close();
+                        System.exit(1);
+                    }
+                    line = input.nextLine().strip();
+                    if(!line.startsWith("then")){
+                        System.out.println("Error: missing 'then' after if statement");
+                        input.close();
+                        System.exit(1);
+                    }
                     continue;
+                }
+
+                // elf
+                matcher = elfCond.matcher(line);
+                if(matcher.find()){
+                    if(!blockTracker.isEmpty() && blockTracker.peek() == 'i'){
+                        String boolEx = matcher.group(1);
+                        output += "}else if (" +
+                        boolEx.replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
+                        ") {\n";
+                        if(!input.hasNextLine()){
+                            System.out.println("Error: ended file with if statement");
+                            input.close();
+                            System.exit(1);
+                        }
+                        line = input.nextLine().strip();
+                        if(!line.startsWith("then")){
+                            System.out.println("Error: missing 'then' after if statement");
+                            input.close();
+                            System.exit(1);
+                        }
+                    } else{
+                        System.out.println("Error: unexpected elf!");
+                        input.close();
+                        System.exit(1);
+                    }
+                }
+
+                // else
+                if(line.startsWith("else")){
+                    if(!blockTracker.isEmpty() && blockTracker.peek() == 'i'){
+                        output += "} else {\n";
+                    } else{
+                        System.out.println("Error: unexpected else!");
+                        input.close();
+                        System.exit(1);
+                    }
                 }
 
                 System.out.println("Invalid syntax.");
