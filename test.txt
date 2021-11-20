@@ -1,6 +1,16 @@
-sfd
-sdgasdga
-adsgadfg
+
 int value = 47.
 print(value).
-zfdgsdfg
+value = 5.
+print(value).
+
+bool q = false.
+print(q).
+q = true.
+print(q).
+
+if q
+then
+value = 0.
+print(value).
+fin
