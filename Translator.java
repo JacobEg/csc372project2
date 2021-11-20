@@ -86,7 +86,6 @@ public class Translator{
                 if(line.startsWith("fin")){
                     if(blockTracker.isEmpty()){
                         System.out.println("ERROR: You added a 'fin' before a conditional or loop!");
-                        output.close();
                         input.close();
                         System.exit(1);
                     } else{
