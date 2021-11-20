@@ -126,13 +126,10 @@ public class Translator{
                         System.exit(1);
                     }
                     // check if variable is of correct type
-                    if (!vars.get(matcher.group(1)).equals("int")) {
-                        System.out.println("Type mismatch");
-                        input.close();
-                        System.exit(1);
+                    if (vars.get(matcher.group(1)).equals("int")) {
+                        output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
+                        continue;
                     }
-                    output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
-                    continue;
                 }
 
                 // boolean assignment
@@ -146,7 +143,7 @@ public class Translator{
                     }
                     // check if variable is of correct type
                     if (!vars.get(matcher.group(1)).equals("bool")) {
-                        System.out.println("Type mismatch");
+                        System.out.println(matcher.group(1) + " is a " + vars.get(matcher.group(1)));
                         input.close();
                         System.exit(1);
                     }

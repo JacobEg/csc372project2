@@ -14,3 +14,12 @@ then
 value = 0.
 print(value).
 fin
+
+while q
+if value < 10
+print(value).
+value = value + 1.
+else
+q = false.
+fin
+fin
