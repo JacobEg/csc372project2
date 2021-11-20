@@ -216,6 +216,7 @@ public class Translator{
                         input.close();
                         System.exit(1);
                     }
+                    continue;
                 }
 
                 // else
@@ -227,6 +228,7 @@ public class Translator{
                         input.close();
                         System.exit(1);
                     }
+                    continue;
                 }
 
                 System.out.println("Invalid syntax.");
