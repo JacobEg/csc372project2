@@ -18,13 +18,23 @@ public class Translator{
     // look into expressions; recursive regex?
     private static final String BOOL_VAL = "(true|false|[a-zA-Z]+[0-9_a-zA-Z]*)";
     private static final String INT_VAL = "(\\-?([0-9]+|[a-zA-Z]+[0-9_a-zA-Z]*))";
-    private static Pattern varDecl = Pattern.compile("int\\s+([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*" + (INT_VAL) + "\\." + 
-    "|bool\\s+[a-zA-Z]+[0-9_a-zA-Z]*\\s*=\\s*" + BOOL_VAL + "\\.");
-    private static Pattern varAssgmt = Pattern.compile("[a-zA-Z]+[0-9_a-zA-Z]*\\s*=\\s*(\\-?[0-9]+|true|false|\\-?[a-zA-Z]+[0-9_a-zA-Z]*)\\.");
+    private static final String INT_COMPARE = "((" + INT_VAL + "\\s*==\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*!=\\s*" + INT_VAL +")|("
+    + INT_VAL + "\\s*>=\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*<=\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*<\\s*" + INT_VAL + ")|("
+    + INT_VAL + "\\s*>\\s*" + INT_VAL + "))";
+    private static final String BOOL_COMPARE = "((" + BOOL_VAL + "\\s*==\\s*" + BOOL_VAL + ")|(" + BOOL_VAL + "\\s*!=\\s*" + BOOL_VAL +"))";
+    private static final String INT_EXPR = "((" + INT_VAL + "\\s*\\+\\s*)|(" + INT_VAL +"\\s*\\-\\s*)|(" +
+    INT_VAL +"\\s*\\*\\s*)|(" + INT_VAL +"\\s*/\\s*)|(" + INT_VAL + "\\s*%\\s*))*" + INT_VAL;
+    private static final String BOOL_EXPR = "((((not\\s+)?" + BOOL_VAL + "\\s+or\\s+)|((not\\s+)?" + BOOL_VAL + "\\s+and\\s+))*(not\\s+)?" + BOOL_VAL
+    + ")|(" + INT_COMPARE + ")|(" + BOOL_COMPARE + ")";
+    private static final String INT_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + INT_EXPR + ")";
+    private static final String BOOL_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + BOOL_EXPR + ")";
+    private static Pattern intDecl = Pattern.compile("int\\s+" + INT_ASSIGN + "\\."); 
+    private static Pattern boolDecl = Pattern.compile("bool\\s+" + BOOL_ASSIGN + "\\.");
+    private static Pattern intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
+    private static Pattern boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
     private static Pattern print = Pattern.compile("print\\(.*\\)\\.");
-    private static Pattern boolExpr = Pattern.compile("((((not)\\s+)?" + BOOL_VAL + "\\s+or\\s+)|(((not)\\s+)?" + BOOL_VAL + "\\s+and\\s+))*" + BOOL_VAL);
-    private static Pattern intExpr = Pattern.compile("((" + INT_VAL + "\\s*\\+\\s*)|(" + INT_VAL +"\\s*\\-\\s*)|(" +
-    INT_VAL +"\\s*\\*\\s*)|(" + INT_VAL +"\\s*/\\s*)|(" + INT_VAL + "\\s*%\\s*))*" + INT_VAL);
+    private static Pattern boolExpr = Pattern.compile(BOOL_EXPR);
+    private static Pattern intExpr = Pattern.compile(INT_EXPR);
 
     public static void main(String[] args){
         if(args.length == 0){
@@ -60,7 +70,7 @@ public class Translator{
             while (input.hasNextLine()){
                 String line = input.nextLine().strip();
                 // TODO: analyze line-by-line (how to do conditionals and loops)?
-                matcher = varDecl.matcher(line);
+                matcher = intDecl.matcher(line);
                 if (matcher.find()) {
                     output.write("int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
                     //System.out.printf("Variable %s was assigned the value %s", matcher.group(1), matcher.group(2));
