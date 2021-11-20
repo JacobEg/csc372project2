@@ -34,7 +34,7 @@ public class Translator{
     private static Pattern boolDecl = Pattern.compile("bool\\s+" + BOOL_ASSIGN + "\\.");
     private static Pattern intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
     private static Pattern boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
-    private static Pattern print = Pattern.compile("print\\(.*\\)\\.");
+    private static Pattern print = Pattern.compile("print\\((.*)\\)\\.");
     private static Pattern boolExpr = Pattern.compile(BOOL_EXPR);
     private static Pattern intExpr = Pattern.compile(INT_EXPR);
     private static Pattern whileCond = Pattern.compile("while\\s+" + BOOL_EXPR);
@@ -74,12 +74,13 @@ public class Translator{
             output.write("public static void main(String[] ARGS) {\n");
             while (input.hasNextLine()){
                 String line = input.nextLine().strip();
-                // TODO: analyze line-by-line (how to do conditionals and loops)?
+                if(line.equals(""))
+                  continue;
+                
+                // int declaration
                 matcher = intDecl.matcher(line);
                 if (matcher.find()) {
                     output.write("int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
-                    //System.out.printf("Variable %s was assigned the value %s", matcher.group(1), matcher.group(2));
-                    // hahahahahah
                     continue;
                 }
                 if(line.startsWith("fin") && blockTracker.isEmpty()){
@@ -88,6 +89,37 @@ public class Translator{
                     input.close();
                     System.exit(1);
                 }
+
+                // boolean declaration
+                matcher = boolDecl.matcher(line);
+                if (matcher.find()) {
+                    output.write("boolean "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    continue;
+                }
+
+                // int assignment
+                matcher = intAssgmt.matcher(line);
+                if (matcher.find()) {
+                    output.write(matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    continue;
+                }
+
+                // boolean assignment
+                matcher = boolAssgmt.matcher(line);
+                if (matcher.find()) {
+                    output.write(matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    continue;
+                }
+
+                // print
+                matcher = print.matcher(line);
+                if (matcher.find()) {
+                    output.write("System.out.print(" + matcher.group(1) + ");\n");
+                    continue;
+                }
+
+                System.out.println("Invalid syntax.");
+                throw new Exception();
             }
             output.write("\n}\n}\n");
             output.close();
