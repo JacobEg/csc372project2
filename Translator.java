@@ -143,7 +143,7 @@ public class Translator{
                     }
                     // check if variable is of correct type
                     if (!vars.get(matcher.group(1)).equals("bool")) {
-                        System.out.println(matcher.group(1) + " is a " + vars.get(matcher.group(1)));
+                        System.out.println("Type mismatch: " + matcher.group(1) + " is not a boolean");
                         input.close();
                         System.exit(1);
                     }
