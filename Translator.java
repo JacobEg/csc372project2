@@ -27,7 +27,7 @@ public class Translator{
     private static final String INT_EXPR = "((" + INT_VAL + "\\s*\\+\\s*)|(" + INT_VAL +"\\s*\\-\\s*)|(" +
     INT_VAL +"\\s*\\*\\s*)|(" + INT_VAL +"\\s*/\\s*)|(" + INT_VAL + "\\s*%\\s*))*" + INT_VAL;
     private static final String BOOL_EXPR = "((((not\\s+)?" + BOOL_VAL + "\\s+or\\s+)|((not\\s+)?" + BOOL_VAL + "\\s+and\\s+))*(not\\s+)?" + BOOL_VAL
-    + ")|(" + INT_COMPARE + ")|(" + BOOL_COMPARE + "))";
+    + ")|(" + INT_COMPARE + ")|(" + BOOL_COMPARE + ")";
     private static final String INT_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + INT_EXPR + ")";
     private static final String BOOL_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + BOOL_EXPR + ")";
     private static Pattern intDecl = Pattern.compile("int\\s+" + INT_ASSIGN + "\\."); 
@@ -64,17 +64,14 @@ public class Translator{
     public static void translate(String pathName){
         String baseName = pathName.substring(0, pathName.length()-4);
         String className = getClassName(baseName);
-        File file = new File(baseName + ".java");
         try {
             Scanner input = new Scanner(new File(pathName));
-            file.delete();
-            file.createNewFile();
-            FileWriter output = new FileWriter(file);
-            output.write("public class " + className + " {\n");
-            output.write("public static void main(String[] fin) {\n");
-            output.write("int[] ARGS = new int[fin.length];\n");
-            output.write("for(int i = 0; i < fin.length; i++){\n");
-            output.write("ARGS[i] = Integer.parseInt(fin[i]);\n}\n");
+            String output = "";
+            output += "public class " + className + " {\n";
+            output +="public static void main(String[] fin) {\n";
+            output += "int[] ARGS = new int[fin.length];\n";
+            output += "for(int i = 0; i < fin.length; i++){\n";
+            output += "ARGS[i] = Integer.parseInt(fin[i]);\n}\n";
             while (input.hasNextLine()){
                 String line = input.nextLine().strip();
                 if(line.equals(""))
@@ -83,7 +80,7 @@ public class Translator{
                 // int declaration
                 matcher = intDecl.matcher(line);
                 if (matcher.find()) {
-                    output.write("int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    output +="int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
                 if(line.startsWith("fin")){
@@ -101,31 +98,32 @@ public class Translator{
                 // boolean declaration
                 matcher = boolDecl.matcher(line);
                 if (matcher.find()) {
-                    output.write("boolean "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    output += "boolean "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
 
                 // int assignment
                 matcher = intAssgmt.matcher(line);
                 if (matcher.find()) {
-                    output.write(matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
 
                 // boolean assignment
                 matcher = boolAssgmt.matcher(line);
                 if (matcher.find()) {
-                    output.write(matcher.group(1) + " = " + matcher.group(2) + ";\n");
+                    output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
                     continue;
                 }
 
                 // print
                 matcher = print.matcher(line);
                 if (matcher.find()) {
-                    output.write("System.out.print(" + matcher.group(1) + ");\n");
+                    output += "System.out.print(" + matcher.group(1) + ");\n";
                     continue;
                 }
 
+                // while
                 matcher = whileCond.matcher(line);
                 if(matcher.find()){
                     blockTracker.push('w');
@@ -134,17 +132,33 @@ public class Translator{
                     "){\n";
                     continue;
                 }
+                // if-statement
+                matcher = ifCond.matcher(line);
+                if (matcher.find()) {
+                    String boolEx = matcher.group(1);
+                    output += "if (" + boolEx + ") {\n";
+                    continue;
+                }
 
                 System.out.println("Invalid syntax.");
                 throw new Exception();
             }
-            output.write("\n}\n}\n");
-            output.close();
+            
+            output += "\n}\n}\n";
             input.close();
+
             if(!blockTracker.isEmpty()){
                 System.out.println("ERROR: You forgot a 'fin' somewhere!");
                 System.exit(1);
             }
+
+            // write output string to new file
+            File file = new File(baseName + ".java");
+            file.delete();
+            file.createNewFile();
+            FileWriter fileOut = new FileWriter(file);
+            fileOut.write(output);
+            fileOut.close();
         } catch (Exception e) {
             System.out.println(e);
             System.exit(1);
