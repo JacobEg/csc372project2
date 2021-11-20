@@ -35,11 +35,11 @@ public class Translator{
     private static Pattern intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
     private static Pattern boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
     private static Pattern print = Pattern.compile("print\\((.*)\\)\\.");
-    private static Pattern boolExpr = Pattern.compile(BOOL_EXPR);
-    private static Pattern intExpr = Pattern.compile(INT_EXPR);
-    private static Pattern whileCond = Pattern.compile("while\\s+" + BOOL_EXPR);
-    private static Pattern ifCond = Pattern.compile("if\\s+" + BOOL_EXPR);
-    private static Pattern elfCond = Pattern.compile("elf\\s+" + BOOL_EXPR);
+    //private static Pattern boolExpr = Pattern.compile(BOOL_EXPR);
+    //private static Pattern intExpr = Pattern.compile(INT_EXPR);
+    private static Pattern whileCond = Pattern.compile("while\\s+(" + BOOL_EXPR + ")");
+    private static Pattern ifCond = Pattern.compile("if\\s+(" + BOOL_EXPR + ")");
+    private static Pattern elfCond = Pattern.compile("elf\\s+(" + BOOL_EXPR + ")");
 
     public static void main(String[] args){
         if(args.length == 0){
@@ -86,6 +86,7 @@ public class Translator{
                         blockTracker.pop();
                         output += "}\n";
                     }
+                    continue;
                 }
 
                 // int declaration

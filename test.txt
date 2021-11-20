@@ -17,6 +17,7 @@ fin
 
 while q
 if value < 10
+then
 print(value).
 value = value + 1.
 else
