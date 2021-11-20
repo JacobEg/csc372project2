@@ -86,11 +86,16 @@ public class Translator{
                     output.write("int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
                     continue;
                 }
-                if(line.startsWith("fin") && blockTracker.isEmpty()){
-                    System.out.println("ERROR: You added a 'fin' before a conditional or loop!");
-                    output.close();
-                    input.close();
-                    System.exit(1);
+                if(line.startsWith("fin")){
+                    if(blockTracker.isEmpty()){
+                        System.out.println("ERROR: You added a 'fin' before a conditional or loop!");
+                        output.close();
+                        input.close();
+                        System.exit(1);
+                    } else{
+                        blockTracker.pop();
+                        output += "}\n";
+                    }
                 }
 
                 // boolean declaration
@@ -118,6 +123,15 @@ public class Translator{
                 matcher = print.matcher(line);
                 if (matcher.find()) {
                     output.write("System.out.print(" + matcher.group(1) + ");\n");
+                    continue;
+                }
+
+                matcher = whileCond.matcher(line);
+                if(matcher.find()){
+                    blockTracker.push('w');
+                    output += "while(" +
+                    matcher.group(1).replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
+                    "){\n";
                     continue;
                 }
 
