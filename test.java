@@ -12,12 +12,12 @@ boolean q = false;
 System.out.print(q);
 q = true;
 System.out.print(q);
-if (if q) {
+if (q) {
 value = 0;
 System.out.print(value);
 }
-while(while q){
-if (if value) {
+while(q){
+if (value < 10) {
 System.out.print(value);
 value = value + 1;
 } else {

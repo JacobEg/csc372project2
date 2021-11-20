@@ -26,8 +26,9 @@ public class Translator{
     private static final String BOOL_COMPARE = "((" + BOOL_VAL + "\\s*==\\s*" + BOOL_VAL + ")|(" + BOOL_VAL + "\\s*!=\\s*" + BOOL_VAL +"))";
     private static final String INT_EXPR = "((" + INT_VAL + "\\s*\\+\\s*)|(" + INT_VAL +"\\s*\\-\\s*)|(" +
     INT_VAL +"\\s*\\*\\s*)|(" + INT_VAL +"\\s*/\\s*)|(" + INT_VAL + "\\s*%\\s*))*" + INT_VAL;
-    private static final String BOOL_EXPR = "((((not\\s+)?" + BOOL_VAL + "\\s+or\\s+)|((not\\s+)?" + BOOL_VAL + "\\s+and\\s+))*(not\\s+)?" + BOOL_VAL
-    + ")|(" + INT_COMPARE + ")|(" + BOOL_COMPARE + ")";
+    private static final String BOOL_RETURNED = "(" + INT_COMPARE + "|" + BOOL_COMPARE + "|" + BOOL_VAL + ")";
+    private static final String BOOL_EXPR = "((((not\\s+)?" + BOOL_RETURNED + "\\s+or\\s+)|((not\\s+)?" + BOOL_RETURNED +
+    "\\s+and\\s+))*(not\\s+)?" + BOOL_RETURNED + ")";
     private static final String INT_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + INT_EXPR + ")";
     private static final String BOOL_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + BOOL_EXPR + ")";
     private static Pattern intDecl = Pattern.compile("int\\s+" + INT_ASSIGN + "\\."); 
