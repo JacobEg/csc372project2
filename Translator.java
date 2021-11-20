@@ -63,6 +63,7 @@ public class Translator{
                 if (matcher.find()) {
                     output.write("int "+ matcher.group(1) + " = " + matcher.group(2) + ";\n");
                     //System.out.printf("Variable %s was assigned the value %s", matcher.group(1), matcher.group(2));
+                    // hahahahahah
                     continue;
                 }
             }
