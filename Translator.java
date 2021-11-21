@@ -35,7 +35,7 @@ public class Translator{
     private static Pattern boolDecl = Pattern.compile("bool\\s+" + BOOL_ASSIGN + "\\.");
     private static Pattern intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
     private static Pattern boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
-    private static Pattern print = Pattern.compile("print\\((.*)\\)\\.");
+    private static Pattern print = Pattern.compile("print\\((\".*\"|" + BOOL_EXPR + "|" + INT_EXPR + ")\\)\\.");
     //private static Pattern boolExpr = Pattern.compile(BOOL_EXPR);
     //private static Pattern intExpr = Pattern.compile(INT_EXPR);
     private static Pattern whileCond = Pattern.compile("while\\s+(" + BOOL_EXPR + ")");
@@ -156,6 +156,7 @@ public class Translator{
                 // print
                 matcher = print.matcher(line);
                 if (matcher.find()) {
+                    System.out.println(matcher.group(0));
                     output += "System.out.print(" + matcher.group(1) + ");\n";
                     continue;
                 }
