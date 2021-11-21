@@ -1,0 +1,3 @@
+int x = 5.
+bool y = true.
+int z = x + y.
