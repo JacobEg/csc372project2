@@ -20,23 +20,21 @@ public class Translator{
     // look into expressions; recursive regex?
     private static String boolVal = "(true|false)";
     private static String intVal = "(\\-?([0-9]+|ARGS\\[[0-9]+\\]))";
-    private static final String INT_EXPR = "((" + intVal + "\\s*(\\+|\\-|\\*|/|%)\\s*)*" + intVal + ")";
-    private static final String INT_COMPARE = "(" + INT_EXPR + "\\s*(==|!=|>=|<=|<|>)\\s*" + INT_EXPR + ")";
-    private static final String BOOL_COMPARE = "(" + boolVal + "\\s*(==|!=)\\s*" + boolVal + ")";
-    private static final String BOOL_RETURNED = "(" + INT_COMPARE + "|" + BOOL_COMPARE + "|" + boolVal + ")";
-    private static final String BOOL_EXPR = "(((not\\s+)?" + BOOL_RETURNED + "\\s+(or|and)\\s+)*(not\\s+)?" + BOOL_RETURNED + ")";
-    private static final String INT_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + INT_EXPR + ")";
-    private static final String BOOL_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + BOOL_EXPR + ")";
-    private static Pattern intDecl = Pattern.compile("int\\s+" + INT_ASSIGN + "\\."); 
-    private static Pattern boolDecl = Pattern.compile("bool\\s+" + BOOL_ASSIGN + "\\.");
-    private static Pattern intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
-    private static Pattern boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
-    private static Pattern print = Pattern.compile("print\\((\".*\"|" + BOOL_EXPR + "|" + INT_EXPR + ")\\)\\.");
-    //private static Pattern boolExpr = Pattern.compile(BOOL_EXPR);
-    //private static Pattern intExpr = Pattern.compile(INT_EXPR);
-    private static Pattern whileCond = Pattern.compile("while\\s+(" + BOOL_EXPR + ")");
-    private static Pattern ifCond = Pattern.compile("if\\s+(" + BOOL_EXPR + ")");
-    private static Pattern elfCond = Pattern.compile("elf\\s+(" + BOOL_EXPR + ")");
+    private static String intExpr = "((" + intVal + "\\s*(\\+|\\-|\\*|/|%)\\s*)*" + intVal + ")";
+    private static String intCompare = "(" + intExpr + "\\s*(==|!=|>=|<=|<|>)\\s*" + intExpr + ")";
+    private static String boolCompare = "(" + boolVal + "\\s*(==|!=)\\s*" + boolVal + ")";
+    private static String boolReturned = "(" + intCompare + "|" + boolCompare + "|" + boolVal + ")";
+    private static String boolExpr = "(((not\\s+)?" + boolReturned + "\\s+(or|and)\\s+)*(not\\s+)?" + boolReturned + ")";
+    private static String intAssign = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + intExpr + ")";
+    private static String boolAssign = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + boolExpr + ")";
+    private static Pattern intDecl = Pattern.compile("int\\s+" + intAssign + "\\."); 
+    private static Pattern boolDecl = Pattern.compile("bool\\s+" + boolAssign + "\\.");
+    private static Pattern intAssgmt = Pattern.compile(intAssign + "\\.");
+    private static Pattern boolAssgmt = Pattern.compile(boolAssign + "\\.");
+    private static Pattern print = Pattern.compile("print\\((\".*\"|" + boolExpr + "|" + intExpr + ")\\)\\.");
+    private static Pattern whileCond = Pattern.compile("while\\s+(" + boolExpr + ")");
+    private static Pattern ifCond = Pattern.compile("if\\s+(" + boolExpr + ")");
+    private static Pattern elfCond = Pattern.compile("elf\\s+(" + boolExpr + ")");
 
     public static void main(String[] args){
         if(args.length == 0) {
@@ -47,14 +45,21 @@ public class Translator{
     }
 
     public static void recompile(){
-        intDecl = Pattern.compile("int\\s+" + INT_ASSIGN + "\\."); 
-        boolDecl = Pattern.compile("bool\\s+" + BOOL_ASSIGN + "\\.");
-        intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
-        boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
-        print = Pattern.compile("print\\((\".*\"|" + BOOL_EXPR + "|" + INT_EXPR + ")\\)\\.");
-        whileCond = Pattern.compile("while\\s+(" + BOOL_EXPR + ")");
-        ifCond = Pattern.compile("if\\s+(" + BOOL_EXPR + ")");
-        elfCond = Pattern.compile("elf\\s+(" + BOOL_EXPR + ")");
+        intExpr = "((" + intVal + "\\s*(\\+|\\-|\\*|/|%)\\s*)*" + intVal + ")";
+        intCompare = "(" + intExpr + "\\s*(==|!=|>=|<=|<|>)\\s*" + intExpr + ")";
+        boolCompare = "(" + boolVal + "\\s*(==|!=)\\s*" + boolVal + ")";
+        boolReturned = "(" + intCompare + "|" + boolCompare + "|" + boolVal + ")";
+        boolExpr = "(((not\\s+)?" + boolReturned + "\\s+(or|and)\\s+)*(not\\s+)?" + boolReturned + ")";
+        intAssign = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + intExpr + ")";
+        boolAssign = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + boolExpr + ")";
+        intDecl = Pattern.compile("int\\s+" + intAssign + "\\."); 
+        boolDecl = Pattern.compile("bool\\s+" + boolAssign + "\\.");
+        intAssgmt = Pattern.compile(intAssign + "\\.");
+        boolAssgmt = Pattern.compile(boolAssign + "\\.");
+        print = Pattern.compile("print\\((\".*\"|" + boolExpr + "|" + intExpr + ")\\)\\.");
+        whileCond = Pattern.compile("while\\s+(" + boolExpr + ")");
+        ifCond = Pattern.compile("if\\s+(" + boolExpr + ")");
+        elfCond = Pattern.compile("elf\\s+(" + boolExpr + ")");
     }
 
     public static String getClassName(String baseName){
@@ -109,8 +114,7 @@ public class Translator{
                     }
                     vars.put(matcher.group(1), "int");
                     // add var to intval regex
-                    intVal = intVal.substring(0, intVal.length()-1) + "| " + matcher.group(1) +")";
-                    
+                    intVal = intVal.substring(0, intVal.length()-2) + "|" + matcher.group(1) +"))";
                     recompile();
                     continue;
                 }
@@ -127,7 +131,7 @@ public class Translator{
                     }
                     vars.put(matcher.group(1), "bool");
                     // add var to boolval regex
-                    boolVal = boolVal.substring(0, boolVal.length()-1) + "| " + matcher.group(1) +")";
+                    boolVal = boolVal.substring(0, boolVal.length()-1) + "|" + matcher.group(1) +")";
                     recompile();
                     continue;
                 }
@@ -246,7 +250,7 @@ public class Translator{
                 }
 
                 // line didn't match any regexes
-                System.out.println("Error: Invalid Syntax");
+                System.out.println("Error: Invalid Syntax or type mismatch!");
                 System.out.println(" On line: " + line);
                 input.close();
                 System.exit(1);
