@@ -3,3 +3,4 @@ if x > 2
 then
 print("hurray").
 fin
+fin
