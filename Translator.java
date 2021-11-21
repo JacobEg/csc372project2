@@ -156,7 +156,6 @@ public class Translator{
                 // print
                 matcher = print.matcher(line);
                 if (matcher.find()) {
-                    System.out.println(matcher.group(0));
                     output += "System.out.print(" + matcher.group(1) + ");\n";
                     continue;
                 }
