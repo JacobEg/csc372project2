@@ -1,4 +1,4 @@
-x = 9.
+int x = 9.
 if x > 2
 print("hurray").
 fin
