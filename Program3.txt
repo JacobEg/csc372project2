@@ -1,0 +1,5 @@
+x = 9.
+if x > 2
+print("hurray").
+fin
+fin
