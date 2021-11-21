@@ -1,3 +1,4 @@
+# Fails due to extra 'fin'
 int x = 9.
 if x > 2
 then

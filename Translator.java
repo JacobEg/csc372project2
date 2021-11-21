@@ -87,7 +87,7 @@ public class Translator{
             output += "ARGS[i] = Integer.parseInt(fin[i]);\n}\n";
             while (input.hasNextLine()){
                 String line = input.nextLine().strip();
-                if(line.equals(""))
+                if(line.equals("") || line.startsWith("#"))
                   continue;
                 
                 if(line.startsWith("fin")){

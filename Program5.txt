@@ -1,3 +1,4 @@
+# Fails due to missing 'then'
 if true
 print("Reached").
 fin
