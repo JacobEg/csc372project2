@@ -18,12 +18,12 @@ public class Translator{
     private static HashMap<String, String> vars = new HashMap<String, String>();
     private static Matcher matcher;
     // look into expressions; recursive regex?
-    private static final String BOOL_VAL = "(true|false|[a-zA-Z]+[0-9_a-zA-Z]*)";
-    private static final String INT_VAL = "(\\-?([0-9]+|ARGS\\[[0-9]+\\]|[a-zA-Z]+[0-9_a-zA-Z]*))";
-    private static final String INT_EXPR = "((" + INT_VAL + "\\s*(\\+|\\-|\\*|/|%)\\s*)*" + INT_VAL + ")";
+    private static String boolVal = "(true|false)";
+    private static String intVal = "(\\-?([0-9]+|ARGS\\[[0-9]+\\]))";
+    private static final String INT_EXPR = "((" + intVal + "\\s*(\\+|\\-|\\*|/|%)\\s*)*" + intVal + ")";
     private static final String INT_COMPARE = "(" + INT_EXPR + "\\s*(==|!=|>=|<=|<|>)\\s*" + INT_EXPR + ")";
-    private static final String BOOL_COMPARE = "(" + BOOL_VAL + "\\s*(==|!=)\\s*" + BOOL_VAL + ")";
-    private static final String BOOL_RETURNED = "(" + INT_COMPARE + "|" + BOOL_COMPARE + "|" + BOOL_VAL + ")";
+    private static final String BOOL_COMPARE = "(" + boolVal + "\\s*(==|!=)\\s*" + boolVal + ")";
+    private static final String BOOL_RETURNED = "(" + INT_COMPARE + "|" + BOOL_COMPARE + "|" + boolVal + ")";
     private static final String BOOL_EXPR = "(((not\\s+)?" + BOOL_RETURNED + "\\s+(or|and)\\s+)*(not\\s+)?" + BOOL_RETURNED + ")";
     private static final String INT_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + INT_EXPR + ")";
     private static final String BOOL_ASSIGN = "([a-zA-Z]+[0-9_a-zA-Z]*)\\s*=\\s*(" + BOOL_EXPR + ")";
@@ -97,6 +97,9 @@ public class Translator{
                         System.exit(1);
                     }
                     vars.put(matcher.group(1), "int");
+                    // add var to intval regex
+                    intVal = intVal.substring(0, intVal.length()-1) + "| " + matcher.group(1) +")";
+                    
                     continue;
                 }
                 
@@ -111,6 +114,9 @@ public class Translator{
                         System.exit(1);
                     }
                     vars.put(matcher.group(1), "bool");
+                    // add var to boolval regex
+                    boolVal = boolVal.substring(0, boolVal.length()-1) + "| " + matcher.group(1) +")";
+
                     continue;
                 }
 
