@@ -46,6 +46,17 @@ public class Translator{
         translate(args[0]);
     }
 
+    public static void recompile(){
+        intDecl = Pattern.compile("int\\s+" + INT_ASSIGN + "\\."); 
+        boolDecl = Pattern.compile("bool\\s+" + BOOL_ASSIGN + "\\.");
+        intAssgmt = Pattern.compile(INT_ASSIGN + "\\.");
+        boolAssgmt = Pattern.compile(BOOL_ASSIGN + "\\.");
+        print = Pattern.compile("print\\((\".*\"|" + BOOL_EXPR + "|" + INT_EXPR + ")\\)\\.");
+        whileCond = Pattern.compile("while\\s+(" + BOOL_EXPR + ")");
+        ifCond = Pattern.compile("if\\s+(" + BOOL_EXPR + ")");
+        elfCond = Pattern.compile("elf\\s+(" + BOOL_EXPR + ")");
+    }
+
     public static String getClassName(String baseName){
         int slashIndex = baseName.lastIndexOf('/');
         int backSlashIndex = baseName.lastIndexOf('\\');
@@ -97,6 +108,7 @@ public class Translator{
                         System.exit(1);
                     }
                     vars.put(matcher.group(1), "int");
+                    recompile();
                     continue;
                 }
                 
@@ -111,6 +123,7 @@ public class Translator{
                         System.exit(1);
                     }
                     vars.put(matcher.group(1), "bool");
+                    recompile();
                     continue;
                 }
 
