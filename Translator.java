@@ -250,8 +250,7 @@ public class Translator{
                 }
 
                 // line didn't match any regexes
-                System.out.println("Error: Invalid Syntax or type mismatch!");
-                System.out.println(" On line: " + line);
+                System.out.println("Error on line: " + line);
                 input.close();
                 System.exit(1);
             }
