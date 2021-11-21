@@ -43,7 +43,7 @@ public class Translator{
     private static Pattern elfCond = Pattern.compile("elf\\s+(" + BOOL_EXPR + ")");
 
     public static void main(String[] args){
-        if(args.length == 0){
+        if(args.length == 0) {
             System.out.println("Provide file to translate via command-line arg.");
             return;
         }
@@ -230,8 +230,11 @@ public class Translator{
                     continue;
                 }
 
-                System.out.println("Invalid syntax.");
-                throw new Exception();
+                // line didn't match any regexes
+                System.out.println("Error: Invalid Syntax");
+                System.out.println(" On line: " + line);
+                input.close();
+                System.exit(1);
             }
             
             output += "\n}\n}\n";
