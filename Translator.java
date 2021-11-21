@@ -19,7 +19,7 @@ public class Translator{
     private static Matcher matcher;
     // look into expressions; recursive regex?
     private static final String BOOL_VAL = "(true|false|[a-zA-Z]+[0-9_a-zA-Z]*)";
-    private static final String INT_VAL = "(\\-?([0-9]+|[a-zA-Z]+[0-9_a-zA-Z]*))";
+    private static final String INT_VAL = "(\\-?([0-9]+|ARGS\\[[0-9]+\\]|[a-zA-Z]+[0-9_a-zA-Z]*))";
     private static final String INT_COMPARE = "((" + INT_VAL + "\\s*==\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*!=\\s*" + INT_VAL +")|("
     + INT_VAL + "\\s*>=\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*<=\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*<\\s*" + INT_VAL + ")|("
     + INT_VAL + "\\s*>\\s*" + INT_VAL + "))";
