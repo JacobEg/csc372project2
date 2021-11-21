@@ -20,12 +20,12 @@ public class Translator{
     // look into expressions; recursive regex?
     private static final String BOOL_VAL = "(true|false|[a-zA-Z]+[0-9_a-zA-Z]*)";
     private static final String INT_VAL = "(\\-?([0-9]+|ARGS\\[[0-9]+\\]|[a-zA-Z]+[0-9_a-zA-Z]*))";
-    private static final String INT_COMPARE = "((" + INT_VAL + "\\s*==\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*!=\\s*" + INT_VAL +")|("
-    + INT_VAL + "\\s*>=\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*<=\\s*" + INT_VAL + ")|(" + INT_VAL + "\\s*<\\s*" + INT_VAL + ")|("
-    + INT_VAL + "\\s*>\\s*" + INT_VAL + "))";
-    private static final String BOOL_COMPARE = "((" + BOOL_VAL + "\\s*==\\s*" + BOOL_VAL + ")|(" + BOOL_VAL + "\\s*!=\\s*" + BOOL_VAL +"))";
     private static final String INT_EXPR = "((" + INT_VAL + "\\s*\\+\\s*)|(" + INT_VAL +"\\s*\\-\\s*)|(" +
     INT_VAL +"\\s*\\*\\s*)|(" + INT_VAL +"\\s*/\\s*)|(" + INT_VAL + "\\s*%\\s*))*" + INT_VAL;
+    private static final String INT_COMPARE = "((" + INT_EXPR + "\\s*==\\s*" + INT_EXPR + ")|(" + INT_EXPR + "\\s*!=\\s*" + INT_EXPR +")|("
+    + INT_EXPR + "\\s*>=\\s*" + INT_EXPR + ")|(" + INT_EXPR + "\\s*<=\\s*" + INT_EXPR + ")|(" + INT_EXPR + "\\s*<\\s*" + INT_EXPR + ")|("
+    + INT_EXPR + "\\s*>\\s*" + INT_EXPR + "))";
+    private static final String BOOL_COMPARE = "((" + BOOL_VAL + "\\s*==\\s*" + BOOL_VAL + ")|(" + BOOL_VAL + "\\s*!=\\s*" + BOOL_VAL +"))";
     private static final String BOOL_RETURNED = "(" + INT_COMPARE + "|" + BOOL_COMPARE + "|" + BOOL_VAL + ")";
     private static final String BOOL_EXPR = "((((not\\s+)?" + BOOL_RETURNED + "\\s+or\\s+)|((not\\s+)?" + BOOL_RETURNED +
     "\\s+and\\s+))*(not\\s+)?" + BOOL_RETURNED + ")";
@@ -169,6 +169,7 @@ public class Translator{
                     "){\n";
                     continue;
                 }
+
                 // if-statement
                 matcher = ifCond.matcher(line);
                 if (matcher.find()) {
