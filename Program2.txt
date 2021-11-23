@@ -2,19 +2,21 @@ int x = ARGS[0].
 
 int i = 2.
 bool found = false.
-while i < x/2 and not found
+while i <= x/2 and not found
     int j = 2.
-    while j < x/2 and not found
+    while j <= x/2 and not found
         if i*j == x
         then
             found = true.
         fin
+        j = j + 1.
     fin
+    i = i + 1.
 fin
 
-if not found
+if found
 then
     print("not ").
 fin
 
-print("found\n").
+print("prime\n").
