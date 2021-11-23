@@ -7,18 +7,20 @@ ARGS[i] = Integer.parseInt(fin[i]);
 int x = ARGS[0];
 int i = 2;
 boolean found = false;
-while(i < x/2 && !found){
+while(i <= x/2 && !found){
 int j = 2;
-while(j < x/2 && !found){
+while(j <= x/2 && !found){
 if (i*j == x) {
 found = true;
 }
+j = j + 1;
 }
+i = i + 1;
 }
-if (!found) {
+if (found) {
 System.out.print("not ");
 }
-System.out.print("found\n");
+System.out.print("prime\n");
 
 }
 }
