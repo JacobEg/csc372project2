@@ -74,6 +74,10 @@ public class Translator{
         }
     }
 
+    public static String translateBoolExpr(String boolExpr){
+        return boolExpr.replaceAll("\\sand\\s", " && ").replaceAll("\\sor\\s", " || ").replaceAll("\\snot\\s", "!");
+    }
+
     public static void translate(String pathName){
         String baseName = pathName.substring(0, pathName.length()-4);
         String className = getClassName(baseName);
@@ -122,7 +126,7 @@ public class Translator{
                 // boolean declaration
                 matcher = boolDecl.matcher(line);
                 if (matcher.find()) {
-                    output += "boolean "+ matcher.group(1) + " = " + matcher.group(2) + ";\n";
+                    output += "boolean "+ matcher.group(1) + " = " + translateBoolExpr(matcher.group(2)) + ";\n";
                     // check if variable already exists
                     if (vars.containsKey(matcher.group(1))) {
                         System.out.println("Error: Variable with name " + matcher.group(1) + " already declared.");
@@ -167,7 +171,7 @@ public class Translator{
                         input.close();
                         System.exit(1);
                     }
-                    output += matcher.group(1) + " = " + matcher.group(2) + ";\n";
+                    output += matcher.group(1) + " = " + translateBoolExpr(matcher.group(2)) + ";\n";
                     continue;
                 }
 
@@ -182,9 +186,7 @@ public class Translator{
                 matcher = whileCond.matcher(line);
                 if(matcher.find()){
                     blockTracker.push('w');
-                    output += "while(" +
-                    matcher.group(1).replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
-                    "){\n";
+                    output += "while(" + translateBoolExpr(matcher.group(1)) + "){\n";
                     continue;
                 }
 
@@ -193,9 +195,7 @@ public class Translator{
                 if (matcher.find()) {
                     blockTracker.push('i');
                     String boolEx = matcher.group(1);
-                    output += "if (" +
-                    boolEx.replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
-                    ") {\n";
+                    output += "if (" + translateBoolExpr(boolEx) + ") {\n";
                     if(!input.hasNextLine()){
                         System.out.println("Error: ended file with if statement");
                         input.close();
@@ -215,9 +215,7 @@ public class Translator{
                 if(matcher.find()){
                     if(!blockTracker.isEmpty() && blockTracker.peek() == 'i'){
                         String boolEx = matcher.group(1);
-                        output += "}else if (" +
-                        boolEx.replaceAll("\\s+and\\s+", " && ").replaceAll("\\s+or\\s+", " || ").replaceAll("not\\s+", "!") +
-                        ") {\n";
+                        output += "}else if (" + translateBoolExpr(boolEx) + ") {\n";
                         if(!input.hasNextLine()){
                             System.out.println("Error: ended file with if statement");
                             input.close();
