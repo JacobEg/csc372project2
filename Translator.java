@@ -74,8 +74,23 @@ public class Translator{
         }
     }
 
+    public static int count(String superstr, String substr){
+        int count = 0;
+        for(int i = 0; i < superstr.length()-substr.length()+1; i++){
+            if(substr.equals(superstr.substring(i, i+substr.length()))){
+                count++;
+            }
+        }
+        return count;
+    }
+
     public static String translateBoolExpr(String boolExpr){
-        return boolExpr.replaceAll("\\sand\\s", " && ").replaceAll("\\sor\\s", " || ").replaceAll("\\snot\\s", "!");
+        String ret = boolExpr.replaceAll("\\sand\\s", " && ").replaceAll("\\sor\\s", " || ").replaceAll("\\snot\\s", " !(");
+        int count = count(ret, "!");
+        for(int i = 0; i < count; i++){
+            ret += ")";
+        }
+        return ret;
     }
 
     public static void translate(String pathName){
