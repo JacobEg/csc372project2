@@ -241,6 +241,8 @@ public class Translator{
                 if(line.startsWith("else")){
                     if(!blockTracker.isEmpty() && blockTracker.peek() == 'i'){
                         output += "} else {\n";
+                        blockTracker.pop();
+                        blockTracker.push('e');
                     } else{
                         System.out.println("Error: unexpected else!");
                         input.close();

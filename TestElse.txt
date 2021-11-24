@@ -1,0 +1,10 @@
+# should fail
+int x = 2.
+if x % 2 == 0
+then
+    print("Even\n").
+else
+    print("Odd\n").
+else
+    print("blah\n").
+fin
