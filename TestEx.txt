@@ -1,0 +1,3 @@
+int sum = 5 + 3.
+bool q = true and not sum < 9.
+print(q).

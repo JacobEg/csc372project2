@@ -7,9 +7,9 @@ ARGS[i] = Integer.parseInt(fin[i]);
 int x = ARGS[0];
 int i = 2;
 boolean found = false;
-while(i <= x/2 && !found){
+while(i <= x/2 && !(found)){
 int j = 2;
-while(j <= x/2 && !found){
+while(j <= x/2 && !(found)){
 if (i*j == x) {
 found = true;
 }
